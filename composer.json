@@ -1,0 +1,45 @@
+{
+  "name": "community-sdks/domain-providers-laravel",
+  "description": "Laravel bridge for community-sdks/domain-providers-php with DB-backed provider registry and TLD sync.",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^11.0|^12.0",
+    "illuminate/database": "^11.0|^12.0",
+    "illuminate/queue": "^11.0|^12.0",
+    "community-sdks/domain-providers-php": "*"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^9.0|^10.0",
+    "phpunit/phpunit": "^11.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "DomainProviders\\Laravel\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DomainProviders\\Laravel\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../php"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "DomainProviders\\Laravel\\Providers\\DomainProvidersServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "phpunit --colors=always"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
