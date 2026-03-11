@@ -8,7 +8,7 @@
     "illuminate/support": "^11.0|^12.0",
     "illuminate/database": "^11.0|^12.0",
     "illuminate/queue": "^11.0|^12.0",
-    "community-sdks/domain-providers-php": "*"
+    "community-sdks/domain-providers-php": "^1.0"
   },
   "require-dev": {
     "orchestra/testbench": "^9.0|^10.0",
@@ -24,12 +24,6 @@
       "DomainProviders\\Laravel\\Tests\\": "tests/"
     }
   },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../php"
-    }
-  ],
   "extra": {
     "laravel": {
       "providers": [
