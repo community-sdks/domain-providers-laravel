@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DomainProviders\Laravel\Console\Commands;
 
 use DomainProviders\Contract\TldDiscoveryInterface;
+use DomainProviders\Laravel\Actions\SyncDomainProviderTldsAction;
 use DomainProviders\Laravel\Jobs\SyncDomainProviderTldsJob;
 use DomainProviders\Laravel\Models\DomainProvider;
-use DomainProviders\Laravel\Services\DomainProviderTldSyncService;
 use DomainProviders\Laravel\Services\LaravelProviderFactoryResolver;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -20,7 +20,7 @@ final class DispatchDomainProviderTldSyncCommand extends Command
 
     public function handle(
         LaravelProviderFactoryResolver $factoryResolver,
-        DomainProviderTldSyncService $syncService,
+        SyncDomainProviderTldsAction $syncAction,
     ): int {
         if (!config('domain-providers.sync.enabled', true)) {
             $this->warn('Domain provider sync is disabled by configuration.');
@@ -57,7 +57,7 @@ final class DispatchDomainProviderTldSyncCommand extends Command
 
             $eligible++;
             if ($inline) {
-                $syncService->sync($provider);
+                $syncAction->sync($provider);
                 continue;
             }
 

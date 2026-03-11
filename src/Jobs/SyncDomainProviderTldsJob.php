@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DomainProviders\Laravel\Jobs;
 
+use DomainProviders\Laravel\Actions\SyncDomainProviderTldsAction;
 use DomainProviders\Laravel\Models\DomainProvider;
-use DomainProviders\Laravel\Services\DomainProviderTldSyncService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,7 +30,7 @@ final class SyncDomainProviderTldsJob implements ShouldQueue
         $this->onQueue((string) config('domain-providers.sync.queue_name', 'domain-providers'));
     }
 
-    public function handle(DomainProviderTldSyncService $service): void
+    public function handle(SyncDomainProviderTldsAction $action): void
     {
         /** @var DomainProvider|null $provider */
         $provider = DomainProvider::query()
@@ -40,6 +40,6 @@ final class SyncDomainProviderTldsJob implements ShouldQueue
             return;
         }
 
-        $service->sync($provider);
+        $action->sync($provider);
     }
 }

@@ -112,6 +112,35 @@ Container bindings:
 - `DomainProviders\Handler\DomainProviderHandler`
 - alias to `DomainProviders\Contract\DomainProviderInterface`
 
+## Reusable Actions
+
+TLD sync logic is implemented in a reusable action:
+
+- `DomainProviders\Laravel\Actions\SyncDomainProviderTldsAction`
+
+This action can be called directly from your own services/controllers/jobs:
+
+```php
+$result = app(\DomainProviders\Laravel\Actions\SyncDomainProviderTldsAction::class)
+  ->syncByProviderId($providerId, $tenantId);
+```
+
+`DomainProviderTldSyncService` remains available as a compatibility wrapper.
+
+## Provider Config Templates
+
+To build provider-specific config forms (for example in Filament), resolve config templates by driver:
+
+```php
+$camel = app(\DomainProviders\Laravel\Services\ProviderConfigResolver::class)
+  ->resolveConfigTemplateForDriver('godaddy');
+
+$snake = app(\DomainProviders\Laravel\Services\ProviderConfigResolver::class)
+  ->resolveConfigTemplateForDriver('godaddy', true);
+```
+
+Templates are derived from the provider config constructor in `community-sdks/domain-providers-php`, so they stay aligned with package updates.
+
 ## Rules Conventions
 
 `rules` is for non-secret provider policy metadata (JSON), e.g.:

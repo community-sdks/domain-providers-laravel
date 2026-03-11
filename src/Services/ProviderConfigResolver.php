@@ -9,8 +9,19 @@ use Illuminate\Support\Collection;
 
 final class ProviderConfigResolver
 {
-    public function __construct(private readonly DomainProviderCacheService $cacheService)
+    public function __construct(
+        private readonly DomainProviderCacheService $cacheService,
+        private readonly LaravelProviderFactoryResolver $factoryResolver,
+    )
     {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function resolveConfigTemplateForDriver(string $driver, bool $snakeCaseKeys = false): array
+    {
+        return $this->factoryResolver->configTemplateForDriver($driver, $snakeCaseKeys);
     }
 
     /**

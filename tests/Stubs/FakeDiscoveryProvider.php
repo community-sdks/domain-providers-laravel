@@ -12,9 +12,16 @@ use DomainProviders\DTO\DomainContact;
 use DomainProviders\DTO\DomainInfo;
 use DomainProviders\DTO\DomainName;
 use DomainProviders\DTO\DomainPrice;
+use DomainProviders\DTO\DomainRegistrationResult;
 use DomainProviders\DTO\DomainRegistrationPeriod;
+use DomainProviders\DTO\DomainRenewalResult;
+use DomainProviders\DTO\DomainTransferResult;
+use DomainProviders\DTO\DnsRecordCreateResult;
+use DomainProviders\DTO\DnsRecordDeleteResult;
+use DomainProviders\DTO\DnsRecordUpdateResult;
 use DomainProviders\DTO\NameserverSet;
-use DomainProviders\DTO\OperationResult;
+use DomainProviders\DTO\NameserverUpdateResult;
+use DomainProviders\DTO\ProviderRequestContext;
 use DomainProviders\DTO\ProviderMetadata;
 use DomainProviders\DTO\TransferAvailabilityResult;
 
@@ -49,17 +56,17 @@ final class FakeDiscoveryProvider implements DomainProviderInterface, TldDiscove
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function registerDomain(DomainName $domain, DomainRegistrationPeriod $period, DomainContact $registrantContact, ?NameserverSet $nameservers = null, ?bool $privacyEnabled = null, ?string $marketId = null): OperationResult
+    public function registerDomain(DomainName $domain, DomainRegistrationPeriod $period, DomainContact $registrantContact, ?NameserverSet $nameservers = null, ?bool $privacyEnabled = null, ?string $marketId = null, ?ProviderRequestContext $context = null): DomainRegistrationResult
     {
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function renewDomain(DomainName $domain, DomainRegistrationPeriod $period): OperationResult
+    public function renewDomain(DomainName $domain, DomainRegistrationPeriod $period): DomainRenewalResult
     {
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function transferDomain(DomainName $domain, string $authCode, ?DomainContact $registrantContact = null): OperationResult
+    public function transferDomain(DomainName $domain, string $authCode, ?DomainContact $registrantContact = null): DomainTransferResult
     {
         throw new \RuntimeException('Not used in tests.');
     }
@@ -69,7 +76,7 @@ final class FakeDiscoveryProvider implements DomainProviderInterface, TldDiscove
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function listDomains(?int $page = null, ?int $pageSize = null, ?string $status = null, ?string $shopperId = null): array
+    public function listDomains(?int $page = null, ?int $pageSize = null, ?string $status = null, ?string $shopperId = null, ?ProviderRequestContext $context = null): array
     {
         throw new \RuntimeException('Not used in tests.');
     }
@@ -79,7 +86,7 @@ final class FakeDiscoveryProvider implements DomainProviderInterface, TldDiscove
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function setNameservers(DomainName $domain, NameserverSet $nameservers): OperationResult
+    public function setNameservers(DomainName $domain, NameserverSet $nameservers): NameserverUpdateResult
     {
         throw new \RuntimeException('Not used in tests.');
     }
@@ -89,17 +96,17 @@ final class FakeDiscoveryProvider implements DomainProviderInterface, TldDiscove
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function createDnsRecord(DomainName $domain, DnsRecord $record, ?string $shopperId = null): OperationResult
+    public function createDnsRecord(DomainName $domain, DnsRecord $record, ?string $shopperId = null, ?ProviderRequestContext $context = null): DnsRecordCreateResult
     {
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function updateDnsRecord(DomainName $domain, DnsRecord $record, ?string $shopperId = null): OperationResult
+    public function updateDnsRecord(DomainName $domain, DnsRecord $record, ?string $shopperId = null, ?ProviderRequestContext $context = null): DnsRecordUpdateResult
     {
         throw new \RuntimeException('Not used in tests.');
     }
 
-    public function deleteDnsRecord(DomainName $domain, ?string $recordId = null, ?DnsRecord $matchRecord = null, ?string $shopperId = null): OperationResult
+    public function deleteDnsRecord(DomainName $domain, ?string $recordId = null, ?DnsRecord $matchRecord = null, ?string $shopperId = null, ?ProviderRequestContext $context = null): DnsRecordDeleteResult
     {
         throw new \RuntimeException('Not used in tests.');
     }

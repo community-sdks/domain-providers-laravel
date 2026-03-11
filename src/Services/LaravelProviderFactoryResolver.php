@@ -13,6 +13,48 @@ use DomainProviders\Laravel\Exceptions\UnsupportedProviderDriverException;
 class LaravelProviderFactoryResolver
 {
     /**
+     * @return class-string<ProviderConfig>
+     */
+    public function configClassForDriver(string $driver): string
+    {
+        return match (strtolower(trim($driver))) {
+            'godaddy' => GoDaddyConfig::class,
+            default => throw UnsupportedProviderDriverException::forDriver($driver),
+        };
+    }
+
+    /**
+     * Build a provider config template from the config constructor signature.
+     *
+     * @return array<string, mixed>
+     */
+    public function configTemplateForDriver(string $driver, bool $snakeCaseKeys = false): array
+    {
+        $class = $this->configClassForDriver($driver);
+        $reflection = new \ReflectionClass($class);
+        $constructor = $reflection->getConstructor();
+
+        if ($constructor === null) {
+            return [];
+        }
+
+        $template = [];
+        foreach ($constructor->getParameters() as $parameter) {
+            $name = $parameter->getName();
+            $key = $snakeCaseKeys ? $this->toSnakeCase($name) : $name;
+
+            if ($parameter->isDefaultValueAvailable()) {
+                $template[$key] = $parameter->getDefaultValue();
+                continue;
+            }
+
+            $template[$key] = $this->emptyValueForParameter($parameter);
+        }
+
+        return $template;
+    }
+
+    /**
      * @return array{0: DomainProviderInterface, 1: ProviderConfig}
      */
     public function buildProvider(string $driver, array $config, array $rules, int $priority): array
@@ -59,5 +101,32 @@ class LaravelProviderFactoryResolver
         }
 
         return $values;
+    }
+
+    private function toSnakeCase(string $value): string
+    {
+        $snake = preg_replace('/(?<!^)[A-Z]/', '_$0', $value);
+        return strtolower((string) $snake);
+    }
+
+    private function emptyValueForParameter(\ReflectionParameter $parameter): mixed
+    {
+        $type = $parameter->getType();
+        if (!$type instanceof \ReflectionNamedType) {
+            return null;
+        }
+
+        if ($type->allowsNull()) {
+            return null;
+        }
+
+        return match ($type->getName()) {
+            'string' => '',
+            'int' => 0,
+            'float' => 0.0,
+            'bool' => false,
+            'array' => [],
+            default => null,
+        };
     }
 }

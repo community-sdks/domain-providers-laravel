@@ -6,6 +6,7 @@ namespace DomainProviders\Laravel\Providers;
 
 use DomainProviders\Contract\DomainProviderInterface;
 use DomainProviders\Handler\DomainProviderHandler;
+use DomainProviders\Laravel\Actions\SyncDomainProviderTldsAction;
 use DomainProviders\Laravel\Console\Commands\DispatchDomainProviderTldSyncCommand;
 use DomainProviders\Laravel\Models\DomainProvider;
 use DomainProviders\Laravel\Models\DomainProviderTld;
@@ -29,6 +30,7 @@ final class DomainProvidersServiceProvider extends ServiceProvider
         $this->app->singleton(ProviderConfigResolver::class);
         $this->app->singleton(LaravelProviderFactoryResolver::class);
         $this->app->singleton(DomainProviderRegistryBuilder::class);
+        $this->app->singleton(SyncDomainProviderTldsAction::class);
         $this->app->singleton(DomainProviderTldSyncService::class);
 
         $this->app->singleton(DomainProviderHandler::class, function ($app): DomainProviderHandler {

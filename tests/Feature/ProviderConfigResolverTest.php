@@ -10,6 +10,35 @@ use DomainProviders\Laravel\Tests\TestCase;
 
 final class ProviderConfigResolverTest extends TestCase
 {
+    public function test_resolves_godaddy_config_template_in_camel_and_snake_case(): void
+    {
+        $resolver = $this->app->make(ProviderConfigResolver::class);
+
+        $camel = $resolver->resolveConfigTemplateForDriver('godaddy');
+        $this->assertSame([
+            'apiKey' => '',
+            'apiSecret' => '',
+            'customerId' => '',
+            'environment' => 'production',
+            'onlyTlds' => null,
+            'exceptTlds' => [],
+            'priority' => 100,
+            'priorityTlds' => [],
+        ], $camel);
+
+        $snake = $resolver->resolveConfigTemplateForDriver('godaddy', true);
+        $this->assertSame([
+            'api_key' => '',
+            'api_secret' => '',
+            'customer_id' => '',
+            'environment' => 'production',
+            'only_tlds' => null,
+            'except_tlds' => [],
+            'priority' => 100,
+            'priority_tlds' => [],
+        ], $snake);
+    }
+
     public function test_resolves_only_active_providers_ordered_by_priority(): void
     {
         DomainProvider::query()->create([
