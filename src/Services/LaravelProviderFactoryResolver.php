@@ -70,11 +70,21 @@ class LaravelProviderFactoryResolver
      */
     private function buildGoDaddyProvider(array $config, array $rules, int $priority): array
     {
+        $customerId = null;
+        $customerIdCandidate = $config['customer_id'] ?? $config['customerId'] ?? null;
+        if (is_scalar($customerIdCandidate)) {
+            $value = trim((string) $customerIdCandidate);
+            if ($value !== '') {
+                $customerId = $value;
+            }
+        }
+
         $providerConfig = new GoDaddyConfig(
             apiKey: (string) ($config['api_key'] ?? ''),
             apiSecret: (string) ($config['api_secret'] ?? ''),
-            customerId: (string) ($config['customer_id'] ?? ''),
+            customerId: $customerId,
             environment: (string) ($config['environment'] ?? 'production'),
+            accountMode: (string) ($config['account_mode'] ?? $config['accountMode'] ?? GoDaddyConfig::ACCOUNT_MODE_RESELLER),
             onlyTlds: $this->listFromRules($rules, 'included_tlds'),
             exceptTlds: $this->listFromRules($rules, 'excluded_tlds') ?? [],
             priority: $priority,

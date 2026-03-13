@@ -141,6 +141,39 @@ $snake = app(\DomainProviders\Laravel\Services\ProviderConfigResolver::class)
 
 Templates are derived from the provider config constructor in `community-sdks/domain-providers-php`, so they stay aligned with package updates.
 
+### GoDaddy Account Modes
+
+GoDaddy now supports both reseller and direct account flows.
+
+Store this in the encrypted `config` JSON for a `godaddy` provider row:
+
+```json
+{
+  "api_key": "your-key",
+  "api_secret": "your-secret",
+  "environment": "production",
+  "account_mode": "reseller",
+  "customer_id": "your-customer-id"
+}
+```
+
+For direct API accounts (non-reseller), use:
+
+```json
+{
+  "api_key": "your-key",
+  "api_secret": "your-secret",
+  "environment": "production",
+  "account_mode": "direct",
+  "customer_id": null
+}
+```
+
+Notes:
+- `account_mode` defaults to `reseller` when omitted.
+- `customer_id` is required in `reseller` mode.
+- `customer_id` can be `null` in `direct` mode.
+
 ## Rules Conventions
 
 `rules` is for non-secret provider policy metadata (JSON), e.g.:

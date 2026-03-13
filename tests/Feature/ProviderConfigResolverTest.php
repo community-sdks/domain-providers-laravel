@@ -18,8 +18,9 @@ final class ProviderConfigResolverTest extends TestCase
         $this->assertSame([
             'apiKey' => '',
             'apiSecret' => '',
-            'customerId' => '',
+            'customerId' => null,
             'environment' => 'production',
+            'accountMode' => 'reseller',
             'onlyTlds' => null,
             'exceptTlds' => [],
             'priority' => 100,
@@ -30,8 +31,9 @@ final class ProviderConfigResolverTest extends TestCase
         $this->assertSame([
             'api_key' => '',
             'api_secret' => '',
-            'customer_id' => '',
+            'customer_id' => null,
             'environment' => 'production',
+            'account_mode' => 'reseller',
             'only_tlds' => null,
             'except_tlds' => [],
             'priority' => 100,
