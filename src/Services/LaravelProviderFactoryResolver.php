@@ -8,6 +8,8 @@ use DomainProviders\Config\ProviderConfig;
 use DomainProviders\Contract\DomainProviderInterface;
 use DomainProviders\Provider\GoDaddy\GoDaddyConfig;
 use DomainProviders\Provider\GoDaddy\GoDaddyProviderFactory;
+use DomainProviders\Provider\Spaceship\SpaceshipConfig;
+use DomainProviders\Provider\Spaceship\SpaceshipProviderFactory;
 use DomainProviders\Laravel\Exceptions\UnsupportedProviderDriverException;
 
 class LaravelProviderFactoryResolver
@@ -19,6 +21,7 @@ class LaravelProviderFactoryResolver
     {
         return match (strtolower(trim($driver))) {
             'godaddy' => GoDaddyConfig::class,
+            'spaceship' => SpaceshipConfig::class,
             default => throw UnsupportedProviderDriverException::forDriver($driver),
         };
     }
@@ -61,6 +64,7 @@ class LaravelProviderFactoryResolver
     {
         return match (strtolower(trim($driver))) {
             'godaddy' => $this->buildGoDaddyProvider($config, $rules, $priority),
+            'spaceship' => $this->buildSpaceshipProvider($config, $rules, $priority),
             default => throw UnsupportedProviderDriverException::forDriver($driver),
         };
     }
@@ -92,6 +96,24 @@ class LaravelProviderFactoryResolver
         );
 
         return [GoDaddyProviderFactory::fromConfig($providerConfig), $providerConfig];
+    }
+
+    /**
+     * @return array{0: DomainProviderInterface, 1: ProviderConfig}
+     */
+    private function buildSpaceshipProvider(array $config, array $rules, int $priority): array
+    {
+        $providerConfig = new SpaceshipConfig(
+            apiKey: (string) ($config['api_key'] ?? ''),
+            apiSecret: (string) ($config['api_secret'] ?? ''),
+            environment: (string) ($config['environment'] ?? 'production'),
+            onlyTlds: $this->listFromRules($rules, 'included_tlds'),
+            exceptTlds: $this->listFromRules($rules, 'excluded_tlds') ?? [],
+            priority: $priority,
+            priorityTlds: $this->listFromRules($rules, 'priority_tlds') ?? [],
+        );
+
+        return [SpaceshipProviderFactory::fromConfig($providerConfig), $providerConfig];
     }
 
     /** @return list<string>|null */

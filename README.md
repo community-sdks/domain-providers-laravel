@@ -141,6 +141,20 @@ $snake = app(\DomainProviders\Laravel\Services\ProviderConfigResolver::class)
 
 Templates are derived from the provider config constructor in `community-sdks/domain-providers-php`, so they stay aligned with package updates.
 
+### Spaceship Config
+
+Store this in the encrypted `config` JSON for a `spaceship` provider row:
+
+```json
+{
+  "api_key": "your-key",
+  "api_secret": "your-secret",
+  "environment": "production"
+}
+```
+
+Use `"environment": "sandbox"` for the Spaceship sandbox environment.
+
 ### GoDaddy Account Modes
 
 GoDaddy now supports both reseller and direct account flows.
